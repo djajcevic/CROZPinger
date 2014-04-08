@@ -19,8 +19,9 @@ public class Resolver {
 
     /**
      * Tries to resolve host. If port is provided, tries to bind to it.
-     * @param host the host to resolve
-     * @param port port to bind to
+     *
+     * @param host    the host to resolve
+     * @param port    port to bind to
      * @param timeout timeout in seconds
      * @return if port is provided returns true when bind is successful; if port is not provided returns true if host can be resolved.
      */
@@ -32,6 +33,7 @@ public class Resolver {
 
         boolean resolved = false;
         try {
+            // try to resolve host/ip
             InetAddress[] allByName = InetAddress.getAllByName(host);
             if (allByName.length > 0) {
                 System.out.printf("RESOLVED [%s] ", allByName[0]);
@@ -47,31 +49,28 @@ public class Resolver {
         }
 
         if (port == null) {
+            // just print a new line :)
             System.out.println();
             return resolved;
         }
 
         InetSocketAddress socketAddress = new InetSocketAddress(host, Integer.parseInt(port));
 
-        if (socketAddress.isUnresolved()) {
-            System.out.printf(FAILURE_UNRESOLVED + "\n");
+        Socket socket = null;
+        try {
+            // try to bind
+            socket = new Socket();
+            socket.connect(socketAddress, timeout);
+            System.out.println(SUCCESS);
+            return true;
+        } catch (IOException e) {
+            System.out.println(FAILURE_COULD_NOT_CONNECT + " { " + e.fillInStackTrace() + " }");
             return false;
-        } else {
-            Socket socket = null;
-            try {
-                socket = new Socket();
-                socket.connect(socketAddress, timeout);
-                System.out.println(SUCCESS);
-                return true;
-            } catch (IOException e) {
-                System.out.println(FAILURE_COULD_NOT_CONNECT + " { " + e.fillInStackTrace() + " }");
-                return false;
-            } finally {
-                if (socket != null) try {
-                    socket.close();
-                } catch (IOException ioe) {
-                    // don't kill me for this :)
-                }
+        } finally {
+            if (socket != null) try {
+                socket.close();
+            } catch (IOException ioe) {
+                // don't kill me for this :)
             }
         }
 

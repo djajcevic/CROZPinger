@@ -2,7 +2,7 @@
 Application:        ${name}
 Version:            ${version}
 Developer:          ${organization.name}
-Developer contact:  ${distributionManagement.repository}
+Source:             ${distributionManagement.repository.url}
 
     Usage:
     -conf   path to the hosts list file. File must have hosts separated by new line. Host format is host[:port].
