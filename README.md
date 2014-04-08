@@ -7,6 +7,9 @@ Java console network util
  
 #Usage
 
+    java -jar pinger-standalone.jar -conf pathToConfFile] [-to #]
+    java -jar pinger-standalone.jar -host 8.8.8.8
+
     -conf   path to the hosts list file. File must have hosts separated by new line. Host format is host[:port].
     -host   if you want to check only one host.
     -to     timeout for telnet. Default is 7 s.
