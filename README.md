@@ -22,6 +22,6 @@ Java console network util
     127.0.0.1:8080
 
 
-###Thanks
+###Thanks to
 
-@Dan Jemiolo - CommandLine class
+ * @Dan Jemiolo - CommandLine class
