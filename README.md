@@ -24,4 +24,4 @@ Java console network util
 
 ###Thanks to
 
- * @Dan Jemiolo - CommandLine class
+Dan Jemiolo - CommandLine class
