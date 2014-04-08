@@ -1,0 +1,11 @@
+
+Application:        ${name}
+Version:            ${version}
+Developer:          ${organization.name}
+Developer contact:  ${distributionManagement.repository}
+
+    Usage:
+    -conf   path to the hosts list file. File must have hosts separated by new line. Host format is host[:port].
+    -host   if you want to check only one host.
+    -to     timeout for telnet. Default is %1$d s.
+
