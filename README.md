@@ -13,5 +13,5 @@ Java console network util
     
 ##Configuration file example
 
-8.8.8.8
-127.0.0.1:8080
+    8.8.8.8
+    127.0.0.1:8080
