@@ -13,6 +13,10 @@ public class Main {
     public static final String TIMEOUT = "-to";
 
     public static void main(String[] args) throws IOException {
+
+        Resolver.setLogEnabled(true);
+        boolean resolve = Resolver.resolve("esb-test.iskon.hr", "22", 7);
+
         List<String> address = new ArrayList<String>();
 
         CommandLine commandLine = new CommandLine();

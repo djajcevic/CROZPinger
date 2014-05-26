@@ -5,6 +5,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.logging.Logger;
 
 /**
  * Host resolver.<br/>
@@ -16,6 +17,8 @@ public class Resolver {
     public static final String FAILURE_COULD_NOT_CONNECT = " FAILURE [COULD NOT CONNECT] ";
     public static final String SUCCESS = " SUCCESS [CONNECTED] ";
     public static final int DEFAULT_TIMEOUT = 7;
+    private static Logger log = Logger.getLogger(Resolver.class.getName());
+    private static boolean logEnabled = false;
 
     /**
      * Tries to resolve host. If port is provided, tries to bind to it.
@@ -29,28 +32,29 @@ public class Resolver {
         if (timeout == 0) {
             timeout = DEFAULT_TIMEOUT;
         }
-        System.out.printf("[%-30s] ", host);
-
+        String message = String.format("[%s] ", host);
         boolean resolved = false;
+        StringBuilder stringBuilder = new StringBuilder(message);
         try {
             // try to resolve host/ip
             InetAddress[] allByName = InetAddress.getAllByName(host);
             if (allByName.length > 0) {
-                System.out.printf("RESOLVED [%s] ", allByName[0]);
+                stringBuilder.append(String.format("RESOLVED [%s] ", allByName[0]));
                 resolved = true;
             } else {
-                System.out.print(FAILURE_UNRESOLVED);
+                stringBuilder.append(FAILURE_UNRESOLVED);
                 resolved = false;
             }
 
         } catch (UnknownHostException e) {
-            System.out.print(FAILURE_UNRESOLVED + " { " + e.fillInStackTrace() + " }");
+            stringBuilder.append(String.format(FAILURE_UNRESOLVED + " { " + e.fillInStackTrace() + " }"));
             resolved = false;
         }
 
         if (port == null) {
             // just print a new line :)
-            System.out.println();
+            stringBuilder.append("\n");
+            info(stringBuilder.toString());
             return resolved;
         }
 
@@ -61,10 +65,12 @@ public class Resolver {
             // try to bind
             socket = new Socket();
             socket.connect(socketAddress, timeout);
-            System.out.println(SUCCESS);
+            stringBuilder.append(SUCCESS);
+            info(stringBuilder.toString());
             return true;
         } catch (IOException e) {
-            System.out.println(FAILURE_COULD_NOT_CONNECT + " { " + e.fillInStackTrace() + " }");
+            stringBuilder.append(String.format(FAILURE_COULD_NOT_CONNECT + " { " + e.fillInStackTrace() + " }"));
+            info(stringBuilder.toString());
             return false;
         } finally {
             if (socket != null) try {
@@ -74,5 +80,17 @@ public class Resolver {
             }
         }
 
+    }
+
+    private static void info(String message) {
+        if (!logEnabled) {
+            System.out.printf(message);
+        } else {
+            log.info(message);
+        }
+    }
+
+    public static void setLogEnabled(boolean enabled) {
+        logEnabled = enabled;
     }
 }
